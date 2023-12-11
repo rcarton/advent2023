@@ -9,6 +9,8 @@ import click
 
 from .utils import get_input_filename_for_day
 
+from .new_day import new_day as new_day_fn
+
 
 @click.command()
 @click.argument("day_num", type=click.IntRange(min=1, max=25))
@@ -33,3 +35,14 @@ def day(day_num: int) -> None:
     click.echo(f"Second: {second_result} ({second_t - first_t:.2f}s)")
 
     click.echo(f"\n✨ Done ({second_t - start_t:.2f}s) ✨")
+
+
+@click.command()
+@click.argument("day_num", type=click.IntRange(min=1, max=25))
+def new_day(day_num: int) -> None:
+    """Create a new day's files."""
+
+    click.echo(f"🎄 Creating new files for day {day_num} 🎄\n")
+    new_day_fn(day_num)
+
+    click.echo(f"\n✨ Done ✨")

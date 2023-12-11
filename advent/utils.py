@@ -44,3 +44,17 @@ def get_data_for_day(day_num: int) -> TextIO:
 
     with open(get_input_filename_for_day(day_num)) as reader:
         return io.StringIO(reader.read())
+
+
+def intersect(r1: tuple[int, int], r2: tuple[int, int]) -> Optional[tuple[int, int]]:
+    # Sort by first number ascending
+    r1, r2 = sorted([r1, r2])
+
+    r1s, r1e = r1
+    r2s, r2e = r2
+
+    if r1e < r2s:
+        # No intersection
+        return None
+
+    return max(r1s, r2s), min(r1e, r2e)
