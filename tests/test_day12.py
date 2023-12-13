@@ -9,6 +9,7 @@ from advent.days.day12 import (
     parse_line,
     second,
     solve,
+    solve_rec,
 )
 
 data = """
@@ -41,16 +42,31 @@ def test_get_candidates(c: Candidate, expected):
 @pytest.mark.parametrize(
     "line, expected",
     [
-        # ("???.### 1,1,3", 1),
-        # (".??..??...?##. 1,1,3", 4),
-        # ("?#?#?#?#?#?#?#? 1,3,1,6", 1),
+        ("???.### 1,1,3", 1),
+        (".??..??...?##. 1,1,3", 4),
+        ("?#?#?#?#?#?#?#? 1,3,1,6", 1),
         ("????.#...#... 4,1,1", 1),
-        # ("????.######..#####. 1,6,5", 4),
-        # ("?###???????? 3,2,1", 10),
+        ("????.######..#####. 1,6,5", 4),
+        ("?###???????? 3,2,1", 10),
     ],
 )
 def test_solve(line, expected):
     assert len(solve(*parse_line(line))) == expected
+
+
+@pytest.mark.parametrize(
+    "line, expected",
+    [
+        ("???.### 1,1,3", 1),
+        (".??..??...?##. 1,1,3", 4),
+        ("?#?#?#?#?#?#?#? 1,3,1,6", 1),
+        ("????.#...#... 4,1,1", 1),
+        ("????.######..#####. 1,6,5", 4),
+        ("?###???????? 3,2,1", 10),
+    ],
+)
+def test_solve_rec(line, expected):
+    assert solve_rec(*parse_line(line)) == expected
 
 
 def test_solve_debug():
