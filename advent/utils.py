@@ -4,6 +4,8 @@ from functools import reduce
 from pathlib import Path
 from typing import List, Optional, Sequence, TextIO, TypeVar, Union
 
+from advent.matrix import Coord
+
 
 def prod(iterable):
     """Equivalent of sum() for multiplying"""
@@ -58,3 +60,7 @@ def intersect(r1: tuple[int, int], r2: tuple[int, int]) -> Optional[tuple[int, i
         return None
 
     return max(r1s, r2s), min(r1e, r2e)
+
+
+def manhattan_distance(c1: Coord, c2: Coord) -> int:
+    return abs(c2[0] - c1[0]) + abs(c2[1] - c1[1])
