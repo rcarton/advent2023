@@ -1,7 +1,7 @@
 from typing import List, TypeVar, Generic, Tuple, Callable, Optional, Iterator
 import itertools as it
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 # row, col
 Coord = Tuple[int, int]
@@ -24,7 +24,7 @@ class Matrix(Generic[T]):
     def __get_index(self, coord: Coord):
         row, col = coord
         if not self.is_valid_coord(coord):
-            raise IndexError(f'Coord out of range {coord}')
+            raise IndexError(f"Coord out of range {coord}")
         return row * self.width + col
 
     def __getitem__(self, coord: Coord) -> T:
@@ -34,7 +34,9 @@ class Matrix(Generic[T]):
         self.data[self.__get_index(coord)] = value
 
     @classmethod
-    def from_string(cls, data: str, fn: Optional[Callable[[str], T]] = None) -> 'Matrix[T]':
+    def from_string(
+        cls, data: str, fn: Optional[Callable[[str], T]] = None
+    ) -> "Matrix[T]":
         rows = data.splitlines()
         height = len(rows)
         width = len(rows[0])
@@ -46,16 +48,27 @@ class Matrix(Generic[T]):
             for y in range(self.width):
                 yield x, y
 
-    def neighbor_coords(self, coord: Coord, include_diagonals: bool = False) -> List[Coord]:
+    def neighbor_coords(
+        self, coord: Coord, include_diagonals: bool = False
+    ) -> List[Coord]:
         row, col = coord
         coords = [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]
         if include_diagonals:
-            coords += [(row - 1, col - 1), (row - 1, col + 1), (row + 1, col - 1), (row + 1, col + 1)]
+            coords += [
+                (row - 1, col - 1),
+                (row - 1, col + 1),
+                (row + 1, col - 1),
+                (row + 1, col + 1),
+            ]
 
         return [c for c in coords if self.is_valid_coord(c)]
 
     def neighbors(self, coord: Coord, include_diagonals: bool = False) -> List[T]:
-        return [self[c] for c in self.neighbor_coords(coord, include_diagonals) if self.is_valid_coord(c)]
+        return [
+            self[c]
+            for c in self.neighbor_coords(coord, include_diagonals)
+            if self.is_valid_coord(c)
+        ]
 
     def nb8(self, coord: Coord) -> List[T]:
         return self.neighbors(coord, include_diagonals=True)
@@ -63,10 +76,20 @@ class Matrix(Generic[T]):
     def nbc8(self, coord: Coord) -> List[Coord]:
         return self.neighbor_coords(coord, include_diagonals=True)
 
+    def get_row(self, row: int) -> List[T]:
+        row_start = row * self.width
+        return self.data[row_start : row_start + self.width]
+
+    def get_col(self, col: int) -> List[T]:
+        return self.data[col :: self.width]
+
+    def get_row_coords(self, row: int) -> List[T]:
+        return []
+
     def __str__(self):
-        out = ''
+        out = ""
         for row in range(self.height):
             for col in range(self.width):
                 out += str(self[row, col])
-            out += '\n'
+            out += "\n"
         return out[:-1]
