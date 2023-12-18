@@ -70,6 +70,9 @@ class Matrix(Generic[T]):
             if self.is_valid_coord(c)
         ]
 
+    def nbc4(self, coord: Coord) -> List[T]:
+        return self.neighbor_coords(coord)
+
     def nb8(self, coord: Coord) -> List[T]:
         return self.neighbors(coord, include_diagonals=True)
 

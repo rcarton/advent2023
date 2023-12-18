@@ -7,9 +7,16 @@ from typing import List, Optional, Sequence, TextIO, TypeVar, Union
 from advent.matrix import Coord
 
 
+T = TypeVar("T")
+
+
 def prod(iterable):
     """Equivalent of sum() for multiplying"""
     return reduce(operator.mul, iterable, 1)
+
+
+def tadd(*tuples: T) -> T:
+    return tuple(sum(l) for l in zip(*tuples))
 
 
 def binseq_to_int(binseq: Sequence[Union[str, int, bool]]) -> int:
@@ -27,9 +34,6 @@ def binseq_to_int(binseq: Sequence[Union[str, int, bool]]) -> int:
 def add_wrap(val: int, incr: int, max_val: int, start_at_one: Optional[bool] = True):
     """Add incr to val, and wrap around at 1 if val+incr > max_val"""
     return (val + incr - 1) % max_val + (1 if start_at_one else 0)
-
-
-T = TypeVar("T")
 
 
 def chunk(s: Sequence[T], count: int) -> List[Sequence[T]]:
