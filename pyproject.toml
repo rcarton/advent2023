@@ -12,6 +12,7 @@ new_day = "advent.cli:new_day"
 [tool.poetry.dependencies]
 python = "^3.10"
 click = "^8.1.7"
+termcolor = "^2.4.0"
 
 
 [tool.poetry.group.dev.dependencies]

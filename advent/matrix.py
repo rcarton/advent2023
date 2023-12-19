@@ -1,10 +1,80 @@
-from typing import List, TypeVar, Generic, Tuple, Callable, Optional, Iterator
 import itertools as it
+from typing import Callable, Generic, Iterator, List, Literal, Optional, Tuple, TypeVar
+
+from advent.utils import tadd
 
 T = TypeVar("T")
 
+
 # row, col
 Coord = Tuple[int, int]
+Delta = Tuple[int, int]
+
+
+Direction = Literal["up", "down", "left", "right"]
+
+
+def get_coords_between_vertices(self, start: Coord, end: Coord) -> list[Coord]:
+    r1, c1 = start
+    r2, c2 = end
+    assert r1 == r2 or c1 == c2
+
+    if r1 == r2:
+        delta = (0, 1) if c1 < c2 else (0, -1)
+    else:
+        delta = (1, 0) if r1 < r2 else (-1, 0)
+
+    curr = start
+    points: list[Coord] = []
+    while True:
+        curr = tadd(curr, delta)
+        if curr == end:
+            break
+        points.append(curr)
+    return points
+
+
+def get_delta_dir(d: Direction) -> Delta:
+    return {
+        "up": (-1, 0),
+        "down": (1, 0),
+        "left": (0, -1),
+        "right": (0, 1),
+    }[d]
+
+
+def manhattan_distance(c1: Coord, c2: Coord) -> int:
+    return abs(c2[0] - c1[0]) + abs(c2[1] - c1[1])
+
+
+def is_clockwise(vertices: list[Coord]) -> bool:
+    # https://en.wikipedia.org/wiki/Curve_orientation#Orientation_of_a_simple_polygon
+    assert len(vertices) > 0
+
+    # Because we're using row, col instead of x, y, we have to convert
+    def to_xy(c: Coord) -> Coord:
+        return c[1], -c[0]
+
+    vertices = [to_xy(c) for c in vertices]
+
+    # Find the vertex with the lowest x
+    min_i = None
+    for i, (x, y) in enumerate(vertices):
+        if min_i is None or (x <= vertices[i][0] and y < vertices[i][1]):
+            min_i = i
+
+    # Compute the determinant of the orientation matrix, just look at the wikipedia explanations
+    xa, ya = vertices[min_i - 1]
+    xb, yb = vertices[min_i]
+    xc, yc = vertices[min_i + 1]
+
+    det = (xb * yc + xa * yb + ya * xc) - (ya * xb + yb * xc + xa * yc)
+
+    if det == 0:
+        raise Exception("I don't know, it's a line or something")
+
+    # Negative determinant => clockwise polygon
+    return det < 0
 
 
 class Matrix(Generic[T]):

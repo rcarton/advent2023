@@ -1,0 +1,1 @@
+Interval = tuple[int, int]

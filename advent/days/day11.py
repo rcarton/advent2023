@@ -1,8 +1,7 @@
 import itertools as it
 from typing import TextIO
 
-from advent.matrix import Coord, Matrix
-from advent.utils import manhattan_distance
+from advent.matrix import Coord, Matrix, manhattan_distance
 
 Space = Matrix[str]
 
