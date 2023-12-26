@@ -140,7 +140,7 @@ class Matrix(Generic[T]):
             if self.is_valid_coord(c)
         ]
 
-    def nbc4(self, coord: Coord) -> List[T]:
+    def nbc4(self, coord: Coord) -> List[Coord]:
         return self.neighbor_coords(coord)
 
     def nb8(self, coord: Coord) -> List[T]:
@@ -158,6 +158,10 @@ class Matrix(Generic[T]):
 
     def get_row_coords(self, row: int) -> List[T]:
         return []
+
+    def items(self) -> Iterator[tuple[Coord, T]]:
+        for c in self.all_coords():
+            yield c, self[c]
 
     def __str__(self):
         out = ""
